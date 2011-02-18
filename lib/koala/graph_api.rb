@@ -108,8 +108,7 @@ module Koala
       
     
       def get_picture(object, args = {})
-        result = graph_call("#{object}/picture", args, "get", :http_component => :headers)
-        result["Location"]
+        graph_call("#{object}/picture", args, "get")
       end    
       
       def put_object(parent_object, connection_name, args = {})

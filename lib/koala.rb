@@ -81,6 +81,10 @@ module Koala
         # now return the desired information
         if options[:http_component]
           result.send(options[:http_component])
+        elsif result.status == 302 && (!body || body == "") && photo_url = result.headers["Location"]
+          # automatically return picture info if there's no other content
+          # (Facebook sends photo info with in the location header with a 302 status)
+          photo_url
         else
           body
         end

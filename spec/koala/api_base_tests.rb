@@ -70,6 +70,24 @@ class ApiBaseTests < Test::Unit::TestCase
       end
     end
     
+    it "should return the location header if the response is a 302 with nil body" do
+      location = "xyz"
+      Koala.stub(:make_request).and_return(Koala::Response.new(302, nil, {"Location" => location}))
+      @service.api('anything').should == location
+    end
+    
+    it "should return the location header if the response is a 302 with '' body" do
+      location = "xyz"
+      Koala.stub(:make_request).and_return(Koala::Response.new(302, nil, {"Location" => location}))
+      @service.api('anything').should == location
+    end
+    
+    it "should not return the location header if the response is a 302 with a body" do
+      location = "xyz"
+      Koala.stub(:make_request).and_return(Koala::Response.new(302, "\"foo\"", {"Location" => location}))
+      @service.api('anything').should == "foo"
+    end
+    
     it "should raise an API error if the HTTP response code is greater than or equal to 500" do
       Koala.stub(:make_request).and_return(Koala::Response.new(500, 'response body', {}))
       
